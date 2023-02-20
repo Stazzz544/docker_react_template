@@ -1,0 +1,25 @@
+# !!!РАБОТАЕТ!!!!!!!!!!!!!!!!!!!
+
+version: "3"
+services:
+  react-suffering:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "3000:3000"
+    container_name: react-suffering
+    stdin_open: true
+
+    # ограничение оперативной памятии файла подкачки
+    mem_limit: 512m
+    mem_reservation: 128M
+
+    #переменные окружения, если .env файл лежит рядом с docker0compose.yaml - достатоно указать только именя переменных
+    environment:
+      # CHOKIDAR_USEPOLLING - фикс для webpack, если не работает хот релоад
+      - CHOKIDAR_USEPOLLING
+    # Тома. Нужны для того, чтобы можн было писать код в локальных файлах приложения, контейнер подхватывал изменения и показывал актуалку
+    volumes:
+      - .:/react-app
+      - /react-app/node_modules
